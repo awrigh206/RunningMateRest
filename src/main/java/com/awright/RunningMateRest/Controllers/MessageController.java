@@ -8,6 +8,7 @@ import com.awright.RunningMateRest.Services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,5 +42,10 @@ public class MessageController {
     @RequestMapping(path = "/sent")
     public List<Message> getSentMessages(@RequestParam String userName){
         return messageService.getSentMessages(userName);
+    }
+
+    @DeleteMapping
+    public void removeMessage(@RequestBody MessageDto messageDto){
+        messageService.removeMessage(messageDto);
     }
 }

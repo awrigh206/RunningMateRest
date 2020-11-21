@@ -3,11 +3,9 @@ package com.awright.RunningMateRest.Services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import com.awright.RunningMateRest.DTO.MessageDto;
 import com.awright.RunningMateRest.Models.Message;
 import com.awright.RunningMateRest.Repositories.MessageRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +41,10 @@ public class MessageService {
         else{
             return result.get();
         }
+    }
+
+    public void removeMessage(MessageDto messageDto){
+        Message message = new Message(messageDto);
+        messageRepo.delete(message);
     }
 }
