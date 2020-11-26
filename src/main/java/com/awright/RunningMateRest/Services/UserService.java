@@ -8,6 +8,9 @@ import com.awright.RunningMateRest.Models.User;
 import com.awright.RunningMateRest.Repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.repository.query.parser.Part.IgnoreCaseType;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +34,23 @@ public class UserService {
     public void removeUser(UserDto userDto){
         User user = new User(userDto);
         userRepo.delete(user);
+    }
+
+    public boolean authenticateUser(UserDto userDto){
+        User user = new User (userDto);
+        Optional<User> possibleUser = userRepo.findByUserName(user.getUserName());
+        if(possibleUser.isPresent()){
+            if(user.getPassword().equals(possibleUser.get().getPassword())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean doesUserExist(UserDto userDto){
+        User user = new User(userDto);
+        Optional<User> possibleUser = userRepo.findByUserName(user.getUserName());
+        return possibleUser.isPresent();
     }
     
 }

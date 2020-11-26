@@ -22,4 +22,5 @@ public class Run {
     private RunningUser runnerOne;
     @OneToOne(cascade = CascadeType.ALL)
     private RunningUser runnerTwo;
+    private String instanceId;
 }

@@ -19,6 +19,12 @@ public class RunningUser {
     private Integer id;
     @OneToOne
     private Run run;
-    private String userName;
+    private String name;
     private Double totalDistanceTravelled;    
+
+    public RunningUser(Run run, String name){
+        this.run = run;
+        this.name = name;
+        totalDistanceTravelled = 0.0;
+    }
 }

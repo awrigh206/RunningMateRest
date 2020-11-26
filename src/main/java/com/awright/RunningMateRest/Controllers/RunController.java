@@ -3,10 +3,7 @@ package com.awright.RunningMateRest.Controllers;
 import com.awright.RunningMateRest.DTO.DistanceUpdateDto;
 import com.awright.RunningMateRest.DTO.RunDto;
 import com.awright.RunningMateRest.Models.Run;
-import com.awright.RunningMateRest.Models.RunningUser;
-import com.awright.RunningMateRest.Repositories.RunRepository;
 import com.awright.RunningMateRest.Services.RunService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +25,7 @@ public class RunController {
 
     @PostMapping
     public void newRun(@RequestBody RunDto runDto){
-        Run run = new Run();
-        runService.createRun(run);
+        runService.createRun(runDto);
     }
 
     @PutMapping
