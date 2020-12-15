@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createUser (UserDto userDto){
+    public void createUser (@RequestBody UserDto userDto){
         log.info(userDto.toString());
         userService.addUser(userDto);
     }
@@ -39,10 +39,11 @@ public class UserController {
     @PostMapping
     @RequestMapping(path = "/exists")
     public boolean userExists(@RequestBody UserDto userDto){
+        log.info(userDto.toString());
         return userService.doesUserExist(userDto);
     }
 
-    @GetMapping
+    @PostMapping
     @RequestMapping(path = "/auth")
     public boolean auth (@RequestBody UserDto userDto){
         return userService.authenticateUser(userDto);

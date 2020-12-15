@@ -2,20 +2,21 @@ package com.awright.RunningMateRest.Services;
 
 import java.util.List;
 import java.util.Optional;
-
 import com.awright.RunningMateRest.DTO.UserDto;
 import com.awright.RunningMateRest.Models.User;
 import com.awright.RunningMateRest.Repositories.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.repository.query.parser.Part.IgnoreCaseType;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService{
     private UserRepository userRepo;
+    @Autowired
+    PasswordEncoder encoder;
 
     @Autowired
     public UserService (UserRepository userRepo){
@@ -24,6 +25,7 @@ public class UserService {
 
     public void addUser(UserDto userDto){
         User user = new User(userDto);
+        user.setPassword(encoder.encode(user.getPassword()));
         userRepo.save(user);
     }
 
@@ -38,7 +40,7 @@ public class UserService {
 
     public boolean authenticateUser(UserDto userDto){
         User user = new User (userDto);
-        Optional<User> possibleUser = userRepo.findByUserName(user.getUserName());
+        Optional<User> possibleUser = userRepo.findByName(user.getName());
         if(possibleUser.isPresent()){
             if(user.getPassword().equals(possibleUser.get().getPassword())){
                 return true;
@@ -49,8 +51,19 @@ public class UserService {
 
     public boolean doesUserExist(UserDto userDto){
         User user = new User(userDto);
-        Optional<User> possibleUser = userRepo.findByUserName(user.getUserName());
+        Optional<User> possibleUser = userRepo.findByName(user.getName());
         return possibleUser.isPresent();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        Optional<User> possibleuser = userRepo.findByName(username);
+        if(possibleuser.isPresent()){
+            return possibleuser.get();
+        }
+        else{
+            throw new UsernameNotFoundException("Could not find that user name");
+        }
     }
     
 }
