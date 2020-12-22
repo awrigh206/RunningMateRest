@@ -43,10 +43,10 @@ public class UserController {
         return userService.doesUserExist(userDto);
     }
 
-    @PostMapping
+    @GetMapping
     @RequestMapping(path = "/auth")
-    public boolean auth (@RequestBody UserDto userDto){
-        return userService.authenticateUser(userDto);
+    public boolean auth (){
+        return true;
     }
 
     @GetMapping

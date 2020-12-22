@@ -54,7 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/user")
         .and()
-        .ignoring().antMatchers("/user/*");
+        .ignoring().antMatchers("/user/exists");
     }
 
     @Bean
