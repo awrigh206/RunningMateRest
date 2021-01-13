@@ -7,6 +7,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
 import com.awright.RunningMateRest.DTO.UserDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,6 +35,8 @@ public class User implements UserDetails {
     private String password;
     private String email;
     private boolean ready;
+    @OneToMany
+    private List<User> challenges;
     @Embedded
     private List<GrantedAuthority> authorities = new ArrayList<>();
 

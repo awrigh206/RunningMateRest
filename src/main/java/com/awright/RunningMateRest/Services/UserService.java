@@ -48,6 +48,7 @@ public class UserService implements UserDetailsService{
     public void notReady(UserDto userDto){
         User selected =  fetchUser(userDto);
         selected.setReady(false);
+        userRepo.save(selected);
     }
 
     public List<User> findReady(){
@@ -58,6 +59,10 @@ public class UserService implements UserDetailsService{
         else{
             return new ArrayList<>();
         }
+    }
+
+    public void createChallenge(){
+        
     }
 
     public User fetchUser(UserDto userDto){

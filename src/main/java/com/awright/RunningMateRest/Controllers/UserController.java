@@ -2,6 +2,8 @@ package com.awright.RunningMateRest.Controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.UserDto;
 import com.awright.RunningMateRest.Models.User;
 import com.awright.RunningMateRest.Services.UserService;
@@ -64,7 +66,6 @@ public class UserController {
     @PutMapping
     @RequestMapping(path = "/make_ready")
     public void makeUserReady(@RequestBody UserDto userDto) {
-        log.info("making ready");
         userService.makeReady(userDto);
     }
 
@@ -72,6 +73,12 @@ public class UserController {
     @RequestMapping(path = "/not_ready")
     public void notReady(@RequestBody UserDto userDto) {
         userService.notReady(userDto);
+    }
+
+    @PutMapping
+    @RequestMapping(path = "/challenge")
+    public void createChallenge(@RequestBody ChallengeDto userDto) {
+        userService.createChallenge();
     }
 
     @GetMapping
