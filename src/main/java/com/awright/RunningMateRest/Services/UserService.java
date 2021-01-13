@@ -38,16 +38,26 @@ public class UserService implements UserDetailsService{
         userRepo.delete(user);
     }
 
-    public boolean authenticateUser(UserDto userDto){
-        User user = new User (userDto);
-        Optional<User> possibleUser = userRepo.findByName(user.getName());
-        if(possibleUser.isPresent()){
-            if(user.getPassword().equals(possibleUser.get().getPassword())){
-                return true;
-            }
-        }
-        return false;
+    public void makeReady (UserDto userDto){
+        User selected = fetchUser(userDto);
+        selected.setReadyToRun(true);
     }
+
+    public void notReady(UserDto userDto){
+        User selected =  fetchUser(userDto);
+        selected.setReadyToRun(false);
+    }
+
+    public User fetchUser(UserDto userDto){
+        Optional<User> user = userRepo.findByName(userDto.getUserName());
+        if(user.isPresent()){
+            return user.get();
+        }
+        else{
+            return null;
+        }
+    }
+
 
     public boolean doesUserExist(UserDto userDto){
         User user = new User(userDto);
