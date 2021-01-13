@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String name;
     private String password;
     private String email;
-    private boolean readyToRun;
+    private boolean ready;
     @Embedded
     private List<GrantedAuthority> authorities = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class User implements UserDetails {
         this.password = userDto.getPassword();
         this.email = userDto.getEmail();
         this.authorities.add(new SimpleGrantedAuthority("USER"));
-        readyToRun = false;
+        ready = false;
     }
 
     @Override

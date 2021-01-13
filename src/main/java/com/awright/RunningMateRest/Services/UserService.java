@@ -1,5 +1,6 @@
 package com.awright.RunningMateRest.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import com.awright.RunningMateRest.DTO.UserDto;
@@ -40,12 +41,23 @@ public class UserService implements UserDetailsService{
 
     public void makeReady (UserDto userDto){
         User selected = fetchUser(userDto);
-        selected.setReadyToRun(true);
+        selected.setReady(true);
+        userRepo.save(selected);
     }
 
     public void notReady(UserDto userDto){
         User selected =  fetchUser(userDto);
-        selected.setReadyToRun(false);
+        selected.setReady(false);
+    }
+
+    public List<User> findReady(){
+        Optional<List<User>> readyUsers = userRepo.findByReady(true);
+        if(readyUsers.isPresent()){
+            return readyUsers.get();
+        }
+        else{
+            return new ArrayList<>();
+        }
     }
 
     public User fetchUser(UserDto userDto){
@@ -57,7 +69,6 @@ public class UserService implements UserDetailsService{
             return null;
         }
     }
-
 
     public boolean doesUserExist(UserDto userDto){
         User user = new User(userDto);

@@ -1,5 +1,6 @@
 package com.awright.RunningMateRest.Controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.awright.RunningMateRest.DTO.UserDto;
 import com.awright.RunningMateRest.Models.User;
@@ -26,48 +27,62 @@ public class UserController {
     private final Log log = LogFactory.getLog(UserController.class);
 
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createUser (@RequestBody UserDto userDto){
+    public void createUser(@RequestBody UserDto userDto) {
         log.info(userDto.toString());
         userService.addUser(userDto);
     }
 
     @PostMapping
     @RequestMapping(path = "/exists")
-    public boolean userExists(@RequestBody UserDto userDto){
+    public boolean userExists(@RequestBody UserDto userDto) {
         log.info(userDto.toString());
         return userService.doesUserExist(userDto);
     }
 
     @GetMapping
     @RequestMapping(path = "/auth")
-    public boolean auth (){
+    public boolean auth() {
         return true;
     }
 
     @GetMapping
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         return userService.getAllUsers();
     }
 
     @DeleteMapping
-    public void removeUser(@RequestBody UserDto userDto){
+    public void removeUser(@RequestBody UserDto userDto) {
         userService.removeUser(userDto);
     }
 
     @PutMapping
-    public void makeUserReady(@RequestBody UserDto userDto){
+    @RequestMapping(path = "/make_ready")
+    public void makeUserReady(@RequestBody UserDto userDto) {
+        log.info("making ready");
         userService.makeReady(userDto);
     }
 
     @PutMapping
-    @RequestMapping(path = "/ready")
-    public void notReady(@RequestBody UserDto userDto){
+    @RequestMapping(path = "/not_ready")
+    public void notReady(@RequestBody UserDto userDto) {
         userService.notReady(userDto);
+    }
+
+    @GetMapping
+    @RequestMapping(path = "/ready")
+    public List<String> findReadyUsers() {
+        List<String> namesOnly = new ArrayList<>();
+        List<User>  users =  userService.findReady();
+
+        for(User current : users){
+            namesOnly.add(current.getName());
+        }
+        return namesOnly;
     }
 }
