@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ChallengeDto {
-    private User issuingUser;
-    private User challengedUser;
+    private String issuingUser;
+    private String challengedUser;
     
 }

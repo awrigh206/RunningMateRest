@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,6 +40,18 @@ public class UserController {
     public void createUser(@RequestBody UserDto userDto) {
         log.info(userDto.toString());
         userService.addUser(userDto);
+    }
+
+    @GetMapping
+    @RequestMapping(path="/email")
+    public User getEmail(@RequestParam("name") String name){
+        UserDto userDto = new UserDto();
+        userDto.setUserName(name);
+        User user = userService.fetchUser(userDto);
+        User toSend = new User();
+        toSend.setEmail(user.getEmail());
+        toSend.setName(user.getName());
+        return toSend;
     }
 
     @PostMapping
@@ -77,8 +91,22 @@ public class UserController {
 
     @PutMapping
     @RequestMapping(path = "/challenge")
-    public void createChallenge(@RequestBody ChallengeDto userDto) {
-        userService.createChallenge();
+    public void createChallenge(@RequestBody ChallengeDto challengeDto) {
+        userService.createChallenge(challengeDto);
+    }
+
+    @GetMapping
+    @RequestMapping(path = "/challenge")
+    public List<String> createChallenge(@RequestParam("name") String name) {
+        //Returns the names of the users who have challenged the given user
+        UserDto userDto = new UserDto(name);
+        User user = userService.fetchUser(userDto);
+        List<String> names = new ArrayList<>();
+
+        for (User current : user.getChallenges()){
+            names.add(current.getName());
+        }
+        return names;
     }
 
     @GetMapping

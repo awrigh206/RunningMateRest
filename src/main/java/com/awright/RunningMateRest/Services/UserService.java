@@ -3,6 +3,8 @@ package com.awright.RunningMateRest.Services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.UserDto;
 import com.awright.RunningMateRest.Models.User;
 import com.awright.RunningMateRest.Repositories.UserRepository;
@@ -61,8 +63,17 @@ public class UserService implements UserDetailsService{
         }
     }
 
-    public void createChallenge(){
-        
+    public void createChallenge(ChallengeDto challengeDto){
+        Optional<User> issuingUser = userRepo.findByName(challengeDto.getIssuingUser());
+        Optional<User> challengedUser = userRepo.findByName(challengeDto.getChallengedUser());
+        if(issuingUser.isPresent() && challengedUser.isPresent()){
+            User issuing = issuingUser.get();
+            User challenged = challengedUser.get();
+            issuing.addChallenege(challenged);
+            userRepo.save(issuing);
+            challenged.addChallenege(issuing);
+            userRepo.save(challenged);
+        }
     }
 
     public User fetchUser(UserDto userDto){

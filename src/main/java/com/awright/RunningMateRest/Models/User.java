@@ -28,6 +28,10 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Entity
 public class User implements UserDetails {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     @GeneratedValue
     @Id
     private Integer id;
@@ -76,5 +80,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void addChallenege(User user){
+        this.challenges.add(user);
     }
 }
