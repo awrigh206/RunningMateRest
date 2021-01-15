@@ -42,7 +42,7 @@ public class User implements UserDetails {
     private boolean ready;
     @ManyToMany
     private List<User> challenges;
-    @OneToMany
+    @ManyToMany
     private List<Message> messages;
     @Embedded
     private List<GrantedAuthority> authorities = new ArrayList<>();
