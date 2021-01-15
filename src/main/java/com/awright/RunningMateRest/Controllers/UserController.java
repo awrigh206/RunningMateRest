@@ -96,7 +96,7 @@ public class UserController {
     }
 
     @GetMapping
-    @RequestMapping(path = "/challenge")
+    @RequestMapping(path = "/challenges")
     public List<String> createChallenge(@RequestParam("name") String name) {
         //Returns the names of the users who have challenged the given user
         UserDto userDto = new UserDto(name);
