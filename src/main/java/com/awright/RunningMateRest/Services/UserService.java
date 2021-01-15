@@ -3,7 +3,6 @@ package com.awright.RunningMateRest.Services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.UserDto;
 import com.awright.RunningMateRest.Models.User;
@@ -14,10 +13,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 @Service
 public class UserService implements UserDetailsService{
     private UserRepository userRepo;
+    private final Log log = LogFactory.getLog(UserService.class);
     @Autowired
     PasswordEncoder encoder;
 
@@ -64,6 +66,7 @@ public class UserService implements UserDetailsService{
     }
 
     public void createChallenge(ChallengeDto challengeDto){
+        log.info("Creating challenge for: " +challengeDto.toString());
         Optional<User> issuingUser = userRepo.findByName(challengeDto.getIssuingUser());
         Optional<User> challengedUser = userRepo.findByName(challengeDto.getChallengedUser());
         if(issuingUser.isPresent() && challengedUser.isPresent()){
@@ -73,6 +76,7 @@ public class UserService implements UserDetailsService{
             userRepo.save(issuing);
             challenged.addChallenege(issuing);
             userRepo.save(challenged);
+            log.info("Did the thing");
         }
     }
 

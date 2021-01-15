@@ -2,7 +2,6 @@ package com.awright.RunningMateRest.Controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.UserDto;
 import com.awright.RunningMateRest.Models.User;
