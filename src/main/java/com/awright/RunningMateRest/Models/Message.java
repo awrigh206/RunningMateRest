@@ -1,5 +1,7 @@
 package com.awright.RunningMateRest.Models;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,8 +15,12 @@ import lombok.ToString;
 
 @Getter @Setter @AllArgsConstructor @ToString @EqualsAndHashCode @NoArgsConstructor
 @Entity
-public class Message {
-    @GeneratedValue 
+public class Message implements Serializable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    @GeneratedValue
     @Id
     private Integer id;
     private String messageBody;

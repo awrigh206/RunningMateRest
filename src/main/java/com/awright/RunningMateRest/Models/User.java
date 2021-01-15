@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
 import com.awright.RunningMateRest.DTO.UserDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -40,6 +42,8 @@ public class User implements UserDetails {
     private boolean ready;
     @ManyToMany
     private List<User> challenges;
+    @OneToMany
+    private List<Message> messages;
     @Embedded
     private List<GrantedAuthority> authorities = new ArrayList<>();
 
@@ -49,6 +53,10 @@ public class User implements UserDetails {
         this.email = userDto.getEmail();
         this.authorities.add(new SimpleGrantedAuthority("USER"));
         ready = false;
+    }
+
+    public void addMessage(Message toAdd){
+        messages.add(toAdd);
     }
 
     @Override

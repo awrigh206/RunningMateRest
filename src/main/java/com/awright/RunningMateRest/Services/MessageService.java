@@ -1,45 +1,37 @@
 package com.awright.RunningMateRest.Services;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import com.awright.RunningMateRest.DTO.MessageDto;
 import com.awright.RunningMateRest.Models.Message;
+import com.awright.RunningMateRest.Models.User;
 import com.awright.RunningMateRest.Repositories.MessageRepository;
+import com.awright.RunningMateRest.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
     private MessageRepository messageRepo;
+    private UserRepository userRepo;
 
     @Autowired
-    public MessageService (MessageRepository repo){
+    public MessageService (MessageRepository repo, UserRepository userRepo){
         this.messageRepo = repo;
+        this.userRepo = userRepo;
     }
 
     public void addMessage(MessageDto messageDto){
         Message message = new Message (messageDto);
-        messageRepo.save(message);
-    }
+        Optional<User> sender = userRepo.findByName(messageDto.getSender());
+        Optional<User> recpient = userRepo.findByName(messageDto.getRecipient());
+        if(sender.isPresent()){
+            sender.get().addMessage(message);
+            userRepo.save(sender.get());
+        }
 
-    public List<Message> getUsersMessages(String recipient){
-        Optional <List<Message>> result = messageRepo.findByRecipient(recipient);
-        if(result.isEmpty()){
-            return new ArrayList<> ();
-        }
-        else{
-            return result.get();
-        }
-    }
-
-    public List<Message> getSentMessages(String sender){
-        Optional <List<Message>> result = messageRepo.findBySender(sender);
-        if(result.isEmpty()){
-            return new ArrayList<> ();
-        }
-        else{
-            return result.get();
+        if(recpient.isPresent()){
+            recpient.get().addMessage(message);
+            userRepo.save(recpient.get());
         }
     }
 
