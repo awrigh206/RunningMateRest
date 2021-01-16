@@ -1,7 +1,7 @@
 package com.awright.RunningMateRest.Controllers;
 
+import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.DistanceUpdateDto;
-import com.awright.RunningMateRest.DTO.RunDto;
 import com.awright.RunningMateRest.Models.Run;
 import com.awright.RunningMateRest.Services.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +24,13 @@ public class RunController {
     }
 
     @PostMapping
-    public void newRun(@RequestBody RunDto runDto){
-        runService.createRun(runDto);
+    public void newRun(@RequestBody ChallengeDto challengeDto){
+        runService.createRun(challengeDto);
     }
 
     @PutMapping
     @RequestMapping(path = "/update")
     public void updateRun(@RequestBody DistanceUpdateDto distanceDto){
-
+        runService.updateRunProgress(distanceDto);
     }
 }

@@ -7,9 +7,9 @@ import lombok.Setter;
 
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class DistanceUpdateDto {
-    private String runnerNameOne;
-    private String runnerNameTwo;
+    private ChallengeDto challengeDto;
     private Double distanceTraveled;
     private Double heightTraveled;
+    private Double timeTaken;
     
 }

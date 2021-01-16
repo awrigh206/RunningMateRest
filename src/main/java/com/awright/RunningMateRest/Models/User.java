@@ -8,9 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.awright.RunningMateRest.DTO.UserDto;
+
+import org.springframework.security.access.intercept.RunAsManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,6 +47,8 @@ public class User implements UserDetails {
     private List<User> challenges;
     @ManyToMany
     private List<Message> messages;
+    @ManyToOne
+    private Run runs;
     @Embedded
     private List<GrantedAuthority> authorities = new ArrayList<>();
 
