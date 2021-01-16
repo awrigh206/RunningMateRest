@@ -48,7 +48,7 @@ public class User implements UserDetails {
     @ManyToMany
     private List<Message> messages;
     @ManyToOne
-    private Run runs;
+    private Run run;
     @Embedded
     private List<GrantedAuthority> authorities = new ArrayList<>();
 

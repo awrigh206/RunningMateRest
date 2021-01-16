@@ -2,12 +2,13 @@ package com.awright.RunningMateRest.Models;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter @Setter @ToString @EqualsAndHashCode
+@Getter @Setter @ToString @EqualsAndHashCode @Embeddable
 public class Tracking implements Serializable{
     private static final long serialVersionUID = 1L;
     private double distance;
