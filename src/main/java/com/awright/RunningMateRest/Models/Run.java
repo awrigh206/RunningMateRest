@@ -1,12 +1,13 @@
 package com.awright.RunningMateRest.Models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import antlr.collections.List;
+import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,15 +19,16 @@ import lombok.ToString;
 @Entity
 public class Run implements Serializable{
     static final long serialVersionUID = 71061845565127165L;
-    @Embedded
-    private Tracking tracking;
     @Id
     @GeneratedValue
     private Integer id;
+    @OneToMany
+    private Map<String,Tracking> tracking;
     @Embedded
     private Pair pair;
-    public Run (Pair pair){
+    public Run (Pair pair, Map<String,Tracking> tracking){
         this.pair = pair;
-        this.tracking = new Tracking();
+        this.tracking = new HashMap<>();
+        this.tracking = tracking;
     }
 }
