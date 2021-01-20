@@ -34,6 +34,18 @@ public class RunService {
         this.trackingRepo = trackingRepo;
     }
 
+    public boolean isChallengedWaiting(String name){
+        User user =  userService.fetchUser(new UserDto(name));
+        return user.getRun().isWaiting();
+    }
+
+    public void setWaiting(String userName){
+        User user = userService.fetchUser(new UserDto(userName));
+        user.getRun().setWaiting(true);
+        runRepo.save(user.getRun());
+        userRepo.save(user);
+    }
+
     public void createRun(ChallengeDto runDto){
         Map<String,Tracking> tracking = new HashMap<>();
         Pair pair = new Pair(runDto);

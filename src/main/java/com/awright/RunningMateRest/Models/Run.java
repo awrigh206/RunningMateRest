@@ -26,9 +26,11 @@ public class Run implements Serializable{
     private Map<String,Tracking> tracking;
     @Embedded
     private Pair pair;
+    private boolean waiting;
     public Run (Pair pair, Map<String,Tracking> tracking){
         this.pair = pair;
         this.tracking = new HashMap<>();
         this.tracking = tracking;
+        this.waiting = false;
     }
 }
