@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,14 +43,20 @@ public class UserController {
 
     @GetMapping
     @RequestMapping(path="/email")
-    public User getEmail(@RequestParam("name") String name){
+    public ResponseEntity<User> getEmail(@RequestParam("name") String name){
         UserDto userDto = new UserDto();
         userDto.setUserName(name);
         User user = userService.fetchUser(userDto);
         User toSend = new User();
         toSend.setEmail(user.getEmail());
         toSend.setName(user.getName());
-        return toSend;
+        if(user != null){
+            return ResponseEntity.ok(toSend);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @PostMapping

@@ -5,6 +5,8 @@ import com.awright.RunningMateRest.DTO.DistanceUpdateDto;
 import com.awright.RunningMateRest.Models.Tracking;
 import com.awright.RunningMateRest.Services.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +28,14 @@ public class RunController {
     }
 
     @GetMapping
-    public void setWaiting(@RequestParam String name){
-        runService.setWaiting(name);
+    public ResponseEntity<Boolean> setWaiting(@RequestParam String name){
+        boolean found = runService.setWaiting(name);
+        if(found){
+            return ResponseEntity.ok(found);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping 
@@ -37,8 +45,14 @@ public class RunController {
     }
 
     @PostMapping
-    public void newRun(@RequestBody ChallengeDto challengeDto){
-        runService.createRun(challengeDto);
+    public ResponseEntity<Boolean> newRun(@RequestBody ChallengeDto challengeDto){
+        boolean result = runService.createRun(challengeDto);
+        if(result){
+            return ResponseEntity.ok(result);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping

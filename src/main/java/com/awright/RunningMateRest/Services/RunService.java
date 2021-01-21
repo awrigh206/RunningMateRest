@@ -39,14 +39,21 @@ public class RunService {
         return user.getRun().isWaiting();
     }
 
-    public void setWaiting(String userName){
+    public boolean setWaiting(String userName){
         User user = userService.fetchUser(new UserDto(userName));
-        user.getRun().setWaiting(true);
-        runRepo.save(user.getRun());
-        userRepo.save(user);
+        if(user != null){
+            user.getRun().setWaiting(true);
+            runRepo.save(user.getRun());
+            userRepo.save(user);
+            return true;
+        }
+        else{
+            return false;
+        }
+        
     }
 
-    public void createRun(ChallengeDto runDto){
+    public boolean createRun(ChallengeDto runDto){
         Map<String,Tracking> tracking = new HashMap<>();
         Pair pair = new Pair(runDto);
         tracking = setupTracking(tracking, pair.getIssuingUser());
@@ -54,11 +61,19 @@ public class RunService {
         Run run = new Run(pair,tracking);
         User issuingUser = userService.fetchUser(new UserDto(runDto.getIssuingUser()));
         User challengedUser = userService.fetchUser(new UserDto(runDto.getChallengedUser()));
-        issuingUser.setRun(run);
-        challengedUser.setRun(run);
-        runRepo.save(run);
-        userRepo.save(issuingUser);
-        userRepo.save(challengedUser);
+
+        if(issuingUser == null || challengedUser  == null){
+            return false;
+        }
+        else{
+            issuingUser.setRun(run);
+            challengedUser.setRun(run);
+            runRepo.save(run);
+            userRepo.save(issuingUser);
+            userRepo.save(challengedUser);
+            return true;
+        }
+
     }
 
     public Map<String,Tracking> setupTracking (Map<String,Tracking> tracking, String user){
