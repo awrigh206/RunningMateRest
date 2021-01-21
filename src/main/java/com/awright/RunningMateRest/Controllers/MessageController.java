@@ -49,7 +49,7 @@ public class MessageController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(path="/image")
+    @RequestMapping(path="/images")
     public List<ImageMessage> getMyImages(@RequestBody ChallengeDto messageDto){
         return messageService.getMyImages(messageDto);
     }
