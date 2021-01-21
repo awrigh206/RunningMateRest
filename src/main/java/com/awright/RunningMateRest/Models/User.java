@@ -47,6 +47,8 @@ public class User implements UserDetails {
     private List<User> challenges;
     @ManyToMany
     private List<Message> messages;
+    @ManyToMany
+    private List <ImageMessage> images;
     @ManyToOne
     private Run run;
     @Embedded
@@ -62,6 +64,10 @@ public class User implements UserDetails {
 
     public void addMessage(Message toAdd){
         messages.add(toAdd);
+    }
+
+    public void addImage(ImageMessage toAdd){
+        this.images.add(toAdd);
     }
 
     @Override

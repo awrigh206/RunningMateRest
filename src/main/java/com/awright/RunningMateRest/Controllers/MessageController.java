@@ -3,8 +3,10 @@ package com.awright.RunningMateRest.Controllers;
 import java.util.ArrayList;
 import java.util.List;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
+import com.awright.RunningMateRest.DTO.ImageDto;
 import com.awright.RunningMateRest.DTO.MessageDto;
 import com.awright.RunningMateRest.DTO.UserDto;
+import com.awright.RunningMateRest.Models.ImageMessage;
 import com.awright.RunningMateRest.Models.Message;
 import com.awright.RunningMateRest.Services.MessageService;
 import com.awright.RunningMateRest.Services.UserService;
@@ -37,6 +39,21 @@ public class MessageController {
     public void createMessage(@RequestBody MessageDto messageDto){
         messageService.addMessage(messageDto);
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(path="/image")
+    public void createImageMessage(@RequestBody ImageDto messageDto){
+        messageService.addImageMessage(messageDto);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(path="/image")
+    public List<ImageMessage> getMyImages(@RequestBody ChallengeDto messageDto){
+        return messageService.getMyImages(messageDto);
+    }
+
 
     @PutMapping
     public List<Message> getMyMessages(@RequestBody ChallengeDto challengeDto){
