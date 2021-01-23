@@ -1,6 +1,7 @@
 package com.awright.RunningMateRest.Services;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
@@ -90,14 +91,16 @@ public class MessageService {
         return toSend;
     }
 
-    public List<ImageMessage> getMyImages(ChallengeDto challengeDto){
+    public List<ImageDto> getMyImages(ChallengeDto challengeDto){
         UserDto issuingUser = new UserDto(challengeDto.getIssuingUser());
         List<ImageMessage> images = userService.fetchUser(issuingUser).getImages();
-        List<ImageMessage> toSend = new ArrayList<>();
+        List<ImageDto> toSend = new ArrayList<>();
 
         for(ImageMessage current : images){
             if(current.getSender().equals(issuingUser.getUserName()) || current.getRecepient().equals(issuingUser.getUserName())){
-                toSend.add(current);
+                String base64 = Base64.getEncoder().encodeToString(current.getBytes());
+                ImageDto sendable = new ImageDto(current.getName(),base64 , current.getRecepient(), current.getSender());
+                toSend.add(sendable);
             }
         }
         return toSend;

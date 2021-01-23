@@ -1,11 +1,9 @@
 package com.awright.RunningMateRest.Controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.ImageDto;
 import com.awright.RunningMateRest.DTO.MessageDto;
-import com.awright.RunningMateRest.DTO.UserDto;
 import com.awright.RunningMateRest.Models.ImageMessage;
 import com.awright.RunningMateRest.Models.Message;
 import com.awright.RunningMateRest.Services.MessageService;
@@ -20,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 @RestController
 @RequestMapping(path = "/message")
@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController {
     private MessageService messageService;
     private UserService userService;
+    private final Log log = LogFactory.getLog(MessageController.class);
     
     @Autowired
     public MessageController(MessageService messageService, UserService userService){
@@ -44,13 +45,14 @@ public class MessageController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path="/image")
     public void createImageMessage(@RequestBody ImageDto messageDto){
+        log.info("Adding image message with the name: " + messageDto.getName());
         messageService.addImageMessage(messageDto);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path="/images")
-    public List<ImageMessage> getMyImages(@RequestBody ChallengeDto messageDto){
+    public List<ImageDto> getMyImages(@RequestBody ChallengeDto messageDto){
         return messageService.getMyImages(messageDto);
     }
 

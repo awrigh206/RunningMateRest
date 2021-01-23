@@ -1,6 +1,7 @@
 package com.awright.RunningMateRest.Models;
 
 import java.io.Serializable;
+import java.util.Base64;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,14 +18,14 @@ public class ImageMessage implements Serializable{
     @GeneratedValue
     @Id
     private Integer id;
-    @Column(length = 50000)
-    private String base64;
+    @Column(length = 10000000)
+    private byte[] bytes;
     private String name;
     private String sender;
     private String recepient;
 
     public ImageMessage (ImageDto dto){
-        this.base64 = dto.getBase64();
+        this.bytes = Base64.getDecoder().decode(dto.getBase64());
         this.name = dto.getName();
         this.sender = dto.getSender();
         this.recepient = dto.getRecipient();
