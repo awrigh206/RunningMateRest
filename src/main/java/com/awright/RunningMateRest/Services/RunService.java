@@ -36,13 +36,13 @@ public class RunService {
 
     public boolean isChallengedWaiting(String name){
         User user =  userService.fetchUser(new UserDto(name));
-        return user.getRun().isWaiting();
+        return user.getRun().isReady();
     }
 
     public boolean setWaiting(String userName){
         User user = userService.fetchUser(new UserDto(userName));
         if(user != null){
-            user.getRun().setWaiting(true);
+            user.getRun().setReady(true);
             runRepo.save(user.getRun());
             userRepo.save(user);
             return true;
@@ -53,7 +53,20 @@ public class RunService {
         
     }
 
-    public boolean createRun(ChallengeDto runDto){
+    public boolean beginRun(ChallengeDto challengeDto){
+        User issuingUser = userService.fetchUser(new UserDto(challengeDto.getIssuingUser()));
+        User challengedUser = userService.fetchUser(new UserDto(challengeDto.getChallengedUser()));
+
+        if(issuingUser.getRun() == null || challengedUser.getRun() == null)
+            return createRun(challengeDto);
+        if(issuingUser.getRun().getChallengedUser().equals(challengedUser.getName()))
+            return true;
+        else{
+            return createRun(challengeDto);
+        }
+    }
+
+    private boolean createRun(ChallengeDto runDto){
         Map<String,Tracking> tracking = new HashMap<>();
         Pair pair = new Pair(runDto);
         tracking = setupTracking(tracking, pair.getIssuingUser());

@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 @RestController
 @RequestMapping(path = "/run")
 @CrossOrigin
 public class RunController {
     private RunService runService;
+    private final Log log = LogFactory.getLog(RunController.class);
 
     @Autowired
     public RunController (RunService runService){
@@ -29,6 +32,7 @@ public class RunController {
 
     @GetMapping
     public ResponseEntity<Boolean> setWaiting(@RequestParam String name){
+        log.info("Setting: " + name + " to waiting");
         boolean found = runService.setWaiting(name);
         if(found){
             return ResponseEntity.ok(found);
@@ -41,12 +45,13 @@ public class RunController {
     @GetMapping 
     @RequestMapping(path = "/challenger")
     public boolean challenegedWaiting(@RequestParam String name){
+        log.info("checking if: " + name + " is waiting, he is: " + runService.isChallengedWaiting(name));
         return runService.isChallengedWaiting(name);
     }
 
     @PostMapping
-    public ResponseEntity<Boolean> newRun(@RequestBody ChallengeDto challengeDto){
-        boolean result = runService.createRun(challengeDto);
+    public ResponseEntity<Boolean> beginRun(@RequestBody ChallengeDto challengeDto){
+        boolean result = runService.beginRun(challengeDto);
         if(result){
             return ResponseEntity.ok(result);
         }

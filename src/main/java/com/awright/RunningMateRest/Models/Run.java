@@ -24,13 +24,14 @@ public class Run implements Serializable{
     private Integer id;
     @OneToMany
     private Map<String,Tracking> tracking;
-    @Embedded
-    private Pair pair;
-    private boolean waiting;
+    private String issuingUser;
+    private String challengedUser;
+    private boolean ready;
     public Run (Pair pair, Map<String,Tracking> tracking){
-        this.pair = pair;
+        this.issuingUser = pair.getIssuingUser();
+        this.challengedUser = pair.getChallengedUser();
         this.tracking = new HashMap<>();
         this.tracking = tracking;
-        this.waiting = false;
+        this.ready = false;
     }
 }

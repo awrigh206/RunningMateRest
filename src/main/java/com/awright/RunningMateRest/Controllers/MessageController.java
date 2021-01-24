@@ -4,7 +4,6 @@ import java.util.List;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.ImageDto;
 import com.awright.RunningMateRest.DTO.MessageDto;
-import com.awright.RunningMateRest.Models.ImageMessage;
 import com.awright.RunningMateRest.Models.Message;
 import com.awright.RunningMateRest.Services.MessageService;
 import com.awright.RunningMateRest.Services.UserService;
