@@ -29,17 +29,20 @@ public class UserService implements UserDetailsService{
     }
 
     public boolean removeChallenge(ChallengeDto challengeDto){
+        log.info("Trying to remove: " + challengeDto.toString());
         boolean removed = false;
         UserDto userDto = new UserDto(challengeDto.getIssuingUser());
         User user = fetchUser(userDto);
-        List<User> challenges = user.getChallenges();
+        List<User> toRemove = new ArrayList<>();
 
-        for(User current : challenges){
+        for(User current : user.getChallenges()){
             if(current.getName().equals(challengeDto.getChallengedUser())){
-                challenges.remove(current);
+                toRemove.add(current);
                 removed = true;
             }
         }
+        user.getChallenges().removeAll(toRemove);
+        userRepo.save(user);
         return removed;
     }
 
@@ -58,20 +61,26 @@ public class UserService implements UserDetailsService{
         userRepo.delete(user);
     }
 
-    public void makeReady (UserDto userDto){
+    public void waiting (UserDto userDto){
         User selected = fetchUser(userDto);
         selected.setWaiting(true);
         userRepo.save(selected);
     }
 
-    public void notReady(UserDto userDto){
+    public void notWaiting(UserDto userDto){
         User selected =  fetchUser(userDto);
         selected.setWaiting(false);
         userRepo.save(selected);
     }
 
+    public void setRunReady (UserDto userDto, boolean value){
+        User selected =  fetchUser(userDto);
+        selected.setReadyToRun(value);
+        userRepo.save(selected);
+    }
+
     public List<User> findReady(){
-        Optional<List<User>> readyUsers = userRepo.findBywaiting(true);
+        Optional<List<User>> readyUsers = userRepo.findByReadyToRun(true);
         if(readyUsers.isPresent()){
             return readyUsers.get();
         }

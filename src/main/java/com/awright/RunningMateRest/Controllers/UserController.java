@@ -84,13 +84,13 @@ public class UserController {
     @PutMapping
     @RequestMapping(path = "/make_ready")
     public void makeUserReady(@RequestBody UserDto userDto) {
-        userService.makeReady(userDto);
+        userService.waiting(userDto);
     }
 
     @PutMapping
     @RequestMapping(path = "/not_ready")
     public void notReady(@RequestBody UserDto userDto) {
-        userService.notReady(userDto);
+        userService.notWaiting(userDto);
     }
 
     @PutMapping
@@ -103,6 +103,18 @@ public class UserController {
     @RequestMapping(path="/challenges/remove")
     public ResponseEntity<Boolean> removeChallenge(@RequestBody ChallengeDto challengeDto){
         return ResponseEntity.ok(userService.removeChallenge(challengeDto));
+    }
+
+    @PutMapping
+    @RequestMapping(path ="/run")
+    public void setReadyToRun(@RequestBody UserDto userDto){
+        userService.setRunReady(userDto, true);
+    }
+
+    @PutMapping
+    @RequestMapping(path ="/run/no")
+    public void setNotReadyToRun(@RequestBody UserDto userDto){
+        userService.setRunReady(userDto, false);
     }
 
     @GetMapping
