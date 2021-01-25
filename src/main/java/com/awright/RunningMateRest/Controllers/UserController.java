@@ -56,7 +56,6 @@ public class UserController {
         else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
 
     @PostMapping
@@ -98,6 +97,12 @@ public class UserController {
     @RequestMapping(path = "/challenge")
     public void createChallenge(@RequestBody ChallengeDto challengeDto) {
         userService.createChallenge(challengeDto);
+    }
+
+    @PutMapping
+    @RequestMapping(path="/challenges/remove")
+    public ResponseEntity<Boolean> removeChallenge(@RequestBody ChallengeDto challengeDto){
+        return ResponseEntity.ok(userService.removeChallenge(challengeDto));
     }
 
     @GetMapping

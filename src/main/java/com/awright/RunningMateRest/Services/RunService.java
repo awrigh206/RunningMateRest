@@ -36,14 +36,13 @@ public class RunService {
 
     public boolean isChallengedWaiting(String name){
         User user =  userService.fetchUser(new UserDto(name));
-        return user.getRun().isReady();
+        return user.isReadyToRun();
     }
 
-    public boolean setWaiting(String userName){
+    public boolean setReadyToRun(String userName){
         User user = userService.fetchUser(new UserDto(userName));
         if(user != null){
-            user.getRun().setReady(true);
-            runRepo.save(user.getRun());
+            user.setReadyToRun(true);
             userRepo.save(user);
             return true;
         }

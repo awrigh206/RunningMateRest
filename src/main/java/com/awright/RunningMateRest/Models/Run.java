@@ -26,12 +26,10 @@ public class Run implements Serializable{
     private Map<String,Tracking> tracking;
     private String issuingUser;
     private String challengedUser;
-    private boolean ready;
     public Run (Pair pair, Map<String,Tracking> tracking){
         this.issuingUser = pair.getIssuingUser();
         this.challengedUser = pair.getChallengedUser();
         this.tracking = new HashMap<>();
         this.tracking = tracking;
-        this.ready = false;
     }
 }

@@ -42,7 +42,8 @@ public class User implements UserDetails {
     private String name;
     private String password;
     private String email;
-    private boolean ready;
+    private boolean waiting;
+    private boolean readyToRun;
     @ManyToMany
     private List<User> challenges;
     @ManyToMany
@@ -59,7 +60,7 @@ public class User implements UserDetails {
         this.password = userDto.getPassword();
         this.email = userDto.getEmail();
         this.authorities.add(new SimpleGrantedAuthority("USER"));
-        ready = false;
+        waiting = false;
     }
 
     public void addMessage(Message toAdd){

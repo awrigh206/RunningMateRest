@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User,Integer>{
     Optional <User> findByName(String name);
-    Optional<List<User>> findByReady(boolean state);
+    Optional<List<User>> findBywaiting(boolean state);
+    Optional<List<User>> findByReadyToRun(boolean state);
 }

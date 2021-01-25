@@ -28,6 +28,21 @@ public class UserService implements UserDetailsService{
         this.userRepo = userRepo;
     }
 
+    public boolean removeChallenge(ChallengeDto challengeDto){
+        boolean removed = false;
+        UserDto userDto = new UserDto(challengeDto.getIssuingUser());
+        User user = fetchUser(userDto);
+        List<User> challenges = user.getChallenges();
+
+        for(User current : challenges){
+            if(current.getName().equals(challengeDto.getChallengedUser())){
+                challenges.remove(current);
+                removed = true;
+            }
+        }
+        return removed;
+    }
+
     public void addUser(UserDto userDto){
         User user = new User(userDto);
         user.setPassword(encoder.encode(user.getPassword()));
@@ -45,18 +60,18 @@ public class UserService implements UserDetailsService{
 
     public void makeReady (UserDto userDto){
         User selected = fetchUser(userDto);
-        selected.setReady(true);
+        selected.setWaiting(true);
         userRepo.save(selected);
     }
 
     public void notReady(UserDto userDto){
         User selected =  fetchUser(userDto);
-        selected.setReady(false);
+        selected.setWaiting(false);
         userRepo.save(selected);
     }
 
     public List<User> findReady(){
-        Optional<List<User>> readyUsers = userRepo.findByReady(true);
+        Optional<List<User>> readyUsers = userRepo.findBywaiting(true);
         if(readyUsers.isPresent()){
             return readyUsers.get();
         }

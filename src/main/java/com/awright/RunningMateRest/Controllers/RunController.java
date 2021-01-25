@@ -33,7 +33,7 @@ public class RunController {
     @GetMapping
     public ResponseEntity<Boolean> setWaiting(@RequestParam String name){
         log.info("Setting: " + name + " to waiting");
-        boolean found = runService.setWaiting(name);
+        boolean found = runService.setReadyToRun(name);
         if(found){
             return ResponseEntity.ok(found);
         }
