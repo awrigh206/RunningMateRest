@@ -29,7 +29,6 @@ public class UserService implements UserDetailsService{
     }
 
     public boolean removeChallenge(ChallengeDto challengeDto){
-        log.info("Trying to remove: " + challengeDto.toString());
         boolean removed = false;
         UserDto userDto = new UserDto(challengeDto.getIssuingUser());
         User user = fetchUser(userDto);
@@ -129,6 +128,14 @@ public class UserService implements UserDetailsService{
         else{
             throw new UsernameNotFoundException("Could not find that user name");
         }
+    }
+
+    public User getEmail(UserDto userDto){
+        User user = fetchUser(userDto);
+        User toSend = new User();
+        toSend.setEmail(user.getEmail());
+        toSend.setName(user.getName());
+        return toSend;
     }
     
 }

@@ -44,14 +44,10 @@ public class UserController {
     @GetMapping
     @RequestMapping(path="/email")
     public ResponseEntity<User> getEmail(@RequestParam("name") String name){
-        UserDto userDto = new UserDto();
-        userDto.setUserName(name);
-        User user = userService.fetchUser(userDto);
-        User toSend = new User();
-        toSend.setEmail(user.getEmail());
-        toSend.setName(user.getName());
+        UserDto userDto = new UserDto(name);
+        User user = userService.getEmail(userDto);
         if(user != null){
-            return ResponseEntity.ok(toSend);
+            return ResponseEntity.ok(user);
         }
         else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
