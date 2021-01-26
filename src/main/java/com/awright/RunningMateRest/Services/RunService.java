@@ -1,7 +1,5 @@
 package com.awright.RunningMateRest.Services;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.DistanceUpdateDto;
@@ -66,10 +64,8 @@ public class RunService {
     }
 
     private boolean createRun(ChallengeDto runDto){
-        Map<String,Tracking> tracking = new HashMap<>();
         Pair pair = new Pair(runDto);
-        tracking = setupTracking(tracking, pair.getIssuingUser());
-        tracking = setupTracking(tracking, pair.getChallengedUser());
+        Tracking tracking = setupTracking(pair.getIssuingUser());
         Run run = new Run(pair,tracking);
         User issuingUser = userService.fetchUser(new UserDto(runDto.getIssuingUser()));
         User challengedUser = userService.fetchUser(new UserDto(runDto.getChallengedUser()));
@@ -88,11 +84,10 @@ public class RunService {
 
     }
 
-    public Map<String,Tracking> setupTracking (Map<String,Tracking> tracking, String user){
+    public Tracking setupTracking (String user){
         Tracking tracker = new Tracking();
         trackingRepo.save(tracker);
-        tracking.put(user, tracker);
-        return tracking;
+        return tracker;
     }
 
     public Tracking updateRunProgress(DistanceUpdateDto distanceUpdateDto){
@@ -101,7 +96,7 @@ public class RunService {
         updateUser(possibleUser, distanceUpdateDto);
         if(possibleChallengedUser.isPresent()){
             User challenegedUser = possibleChallengedUser.get();
-            return challenegedUser.getRun().getTracking().get(challenegedUser.getName());
+            return challenegedUser.getRun().getTracking();
         }
         else{
             return new Tracking(0.0, 0.0, 0.0);
@@ -112,7 +107,7 @@ public class RunService {
         if(toUpdate.isPresent()){
             User user = toUpdate.get();
             Run run = toUpdate.get().getRun();
-            Tracking tracking = run.getTracking().get(user.getUsername());
+            Tracking tracking = run.getTracking();
             tracking.setDistance(tracking.getDistance() + distanceUpdateDto.getDistanceTraveled());
             tracking.setAltitude(tracking.getAltitude() + distanceUpdateDto.getHeightTraveled());
             tracking.setTime(tracking.getTime() + distanceUpdateDto.getTimeTaken());

@@ -63,4 +63,10 @@ public class RunController {
     public Tracking updateRun(@RequestBody DistanceUpdateDto distanceDto){
         return runService.updateRunProgress(distanceDto);
     }
+
+    @GetMapping
+    @RequestMapping(path="/opponent")
+    public ResponseEntity<Tracking> getLastOpponentUpdate(){
+        return ResponseEntity.ok(new Tracking());
+    }
 }

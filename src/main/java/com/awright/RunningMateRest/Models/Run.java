@@ -1,12 +1,10 @@
 package com.awright.RunningMateRest.Models;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,14 +19,13 @@ public class Run implements Serializable{
     @Id
     @GeneratedValue
     private Integer id;
-    @OneToMany
-    private Map<String,Tracking> tracking;
+    @OneToOne
+    private Tracking tracking;
     private String issuingUser;
     private String challengedUser;
-    public Run (Pair pair, Map<String,Tracking> tracking){
+    public Run (Pair pair, Tracking tracking){
         this.issuingUser = pair.getIssuingUser();
         this.challengedUser = pair.getChallengedUser();
-        this.tracking = new HashMap<>();
         this.tracking = tracking;
     }
 }
