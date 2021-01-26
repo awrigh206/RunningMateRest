@@ -96,7 +96,6 @@ public class RunService {
     }
 
     public Tracking updateRunProgress(DistanceUpdateDto distanceUpdateDto){
-        log.info("Updating the run with: " + distanceUpdateDto.toString());
         Optional<User> possibleUser = userRepo.findByName(distanceUpdateDto.getChallengeDto().getIssuingUser());
         Optional<User> possibleChallengedUser = userRepo.findByName(distanceUpdateDto.getChallengeDto().getChallengedUser());
         updateUser(possibleUser, distanceUpdateDto);
@@ -107,8 +106,6 @@ public class RunService {
         else{
             return new Tracking(0.0, 0.0, 0.0);
         }
-        //updateUser(possibleChallengedUser, distanceUpdateDto);
-        
     }
 
     private void updateUser (Optional<User> toUpdate, DistanceUpdateDto distanceUpdateDto){

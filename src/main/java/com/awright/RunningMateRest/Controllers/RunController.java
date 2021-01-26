@@ -32,7 +32,6 @@ public class RunController {
 
     @GetMapping
     public ResponseEntity<Boolean> setWaiting(@RequestParam String name){
-        log.info("Setting: " + name + " to waiting");
         boolean found = runService.setReadyToRun(name);
         if(found){
             return ResponseEntity.ok(found);
@@ -45,7 +44,6 @@ public class RunController {
     @GetMapping 
     @RequestMapping(path = "/challenger")
     public boolean challenegedWaiting(@RequestParam String name){
-        log.info("checking if: " + name + " is waiting, he is: " + runService.isChallengedWaiting(name));
         return runService.isChallengedWaiting(name);
     }
 
