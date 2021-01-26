@@ -78,7 +78,7 @@ public class UserController {
     }
 
     @PutMapping
-    @RequestMapping(path = "/make_ready")
+    @RequestMapping(path = "/make_waiting")
     public void makeUserReady(@RequestBody UserDto userDto) {
         userService.waiting(userDto);
     }
@@ -132,6 +132,18 @@ public class UserController {
     public List<String> findReadyUsers() {
         List<String> namesOnly = new ArrayList<>();
         List<User>  users =  userService.findReady();
+
+        for(User current : users){
+            namesOnly.add(current.getName());
+        }
+        return namesOnly;
+    }
+
+    @GetMapping
+    @RequestMapping(path = "/waiting")
+    public List<String> findWaitingUsers() {
+        List<String> namesOnly = new ArrayList<>();
+        List<User>  users =  userService.findWaiting();
 
         for(User current : users){
             namesOnly.add(current.getName());

@@ -88,6 +88,16 @@ public class UserService implements UserDetailsService{
         }
     }
 
+    public List<User> findWaiting(){
+        Optional<List<User>> waitingUsers = userRepo.findBywaiting(true);
+        if(waitingUsers.isPresent()){
+            return waitingUsers.get();
+        }
+        else{
+            return new ArrayList<>();
+        }
+    }
+
     public void createChallenge(ChallengeDto challengeDto){
         log.info("Creating challenge for: " +challengeDto.toString());
         Optional<User> issuingUser = userRepo.findByName(challengeDto.getIssuingUser());
