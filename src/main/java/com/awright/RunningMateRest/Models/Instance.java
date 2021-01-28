@@ -1,6 +1,10 @@
 package com.awright.RunningMateRest.Models;
 
+import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import lombok.Getter;
@@ -9,7 +13,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @ToString @NoArgsConstructor
-public class Instance {
+@Entity
+public class Instance implements Serializable{
+    private static final long serialVersionUID = 2508557110934308736L;
+    @Id
+    @GeneratedValue
+    private Integer id;
     @OneToMany
     private List<User> usersInvolved;
     @ManyToMany
