@@ -42,14 +42,14 @@ public class User implements UserDetails {
     private boolean readyToRun;
     @ManyToMany
     private List<Instance> instances;
-    @ManyToMany
-    private List<User> challenges;
-    @ManyToMany
-    private List<Message> messages;
-    @ManyToMany
-    private List <ImageMessage> images;
-    @ManyToOne
-    private Run run;
+    // @ManyToMany
+    // private List<User> challenges;
+    // @ManyToMany
+    // private List<Message> messages;
+    // @ManyToMany
+    // private List <ImageMessage> images;
+    // @ManyToOne
+    // private Run run;
     @Embedded
     private List<GrantedAuthority> authorities = new ArrayList<>();
 
@@ -61,13 +61,13 @@ public class User implements UserDetails {
         waiting = false;
     }
 
-    public void addMessage(Message toAdd){
-        messages.add(toAdd);
-    }
+    // public void addMessage(Message toAdd){
+    //     messages.add(toAdd);
+    // }
 
-    public void addImage(ImageMessage toAdd){
-        this.images.add(toAdd);
-    }
+    // public void addImage(ImageMessage toAdd){
+    //     this.images.add(toAdd);
+    // }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -99,7 +99,11 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void addChallenege(User user){
-        this.challenges.add(user);
+    public void removeInstance (Instance instance){
+        this.instances.remove(instance);
     }
+
+    // public void addChallenege(User user){
+    //     this.challenges.add(user);
+    // }
 }

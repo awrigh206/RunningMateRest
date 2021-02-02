@@ -31,7 +31,7 @@ public class Message implements Serializable {
     public Message (MessageDto messageDto){
         this.messageBody = messageDto.getMessageBody();
         this.timeStamp = messageDto.getTimeStamp();
-        this.sender = messageDto.getSender();
-        this.recipient = messageDto.getRecipient();
+        this.sender = messageDto.getUsersInvolved().get(0);
+        this.recipient = messageDto.getUsersInvolved().get(1);
     }
 }

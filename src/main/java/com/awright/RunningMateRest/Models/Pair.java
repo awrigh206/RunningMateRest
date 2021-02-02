@@ -13,6 +13,6 @@ public class Pair extends ChallengeDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Pair (ChallengeDto challengeDto){
-        super(challengeDto.getIssuingUser(),challengeDto.getChallengedUser());
+        super(challengeDto.getInvolvedUsers());
     }
 }

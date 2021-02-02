@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.UserDto;
+import com.awright.RunningMateRest.Models.Instance;
 import com.awright.RunningMateRest.Models.User;
 import com.awright.RunningMateRest.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,9 @@ public class UserService implements UserDetailsService{
     private UserRepository userRepo;
     private final Log log = LogFactory.getLog(UserService.class);
     @Autowired
-    PasswordEncoder encoder;
+    private PasswordEncoder encoder;
+    @Autowired
+    private InstanceService instanceService;
 
     @Autowired
     public UserService (UserRepository userRepo){
@@ -30,18 +33,20 @@ public class UserService implements UserDetailsService{
 
     public boolean removeChallenge(ChallengeDto challengeDto){
         boolean removed = false;
-        UserDto userDto = new UserDto(challengeDto.getIssuingUser());
-        User user = fetchUser(userDto);
-        List<User> toRemove = new ArrayList<>();
+        instanceService.removeInstance(challengeDto);
+        // UserDto userDto = new UserDto(challengeDto.getIssuingUser());
+        // User user = fetchUser(userDto);
+        // List<User> toRemove = new ArrayList<>();
+        // instanceService.removeInstance(challengeDto);
 
-        for(User current : user.getChallenges()){
-            if(current.getName().equals(challengeDto.getChallengedUser())){
-                toRemove.add(current);
-                removed = true;
-            }
-        }
-        user.getChallenges().removeAll(toRemove);
-        userRepo.save(user);
+        // for(User current : user.getChallenges()){
+        //     if(current.getName().equals(challengeDto.getChallengedUser())){
+        //         toRemove.add(current);
+        //         removed = true;
+        //     }
+        // }
+        // user.getChallenges().removeAll(toRemove);
+        // userRepo.save(user);
         return removed;
     }
 
@@ -100,15 +105,16 @@ public class UserService implements UserDetailsService{
 
     public void createChallenge(ChallengeDto challengeDto){
         log.info("Creating challenge for: " +challengeDto.toString());
-        Optional<User> issuingUser = userRepo.findByName(challengeDto.getIssuingUser());
-        Optional<User> challengedUser = userRepo.findByName(challengeDto.getChallengedUser());
+        Optional<User> issuingUser = userRepo.findByName(challengeDto.getInvolvedUsers().get(0));
+        Optional<User> challengedUser = userRepo.findByName(challengeDto.getInvolvedUsers().get(1));
         if(issuingUser.isPresent() && challengedUser.isPresent()){
-            User issuing = issuingUser.get();
-            User challenged = challengedUser.get();
-            issuing.addChallenege(challenged);
-            userRepo.save(issuing);
-            challenged.addChallenege(issuing);
-            userRepo.save(challenged);
+            // User issuing = issuingUser.get();
+            // User challenged = challengedUser.get();
+            instanceService.createNewInstance(challengeDto);
+            // issuing.getInstances(challenged);
+            // userRepo.save(issuing);
+            // challenged.addChallenege(issuing);
+            // userRepo.save(challenged);
             log.info("Did the thing");
         }
     }

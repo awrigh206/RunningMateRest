@@ -24,8 +24,8 @@ public class Run implements Serializable{
     private String issuingUser;
     private String challengedUser;
     public Run (Pair pair, Tracking tracking){
-        this.issuingUser = pair.getIssuingUser();
-        this.challengedUser = pair.getChallengedUser();
+        this.issuingUser = pair.getInvolvedUsers().get(0);
+        this.challengedUser = pair.getInvolvedUsers().get(1);
         this.tracking = tracking;
     }
 }

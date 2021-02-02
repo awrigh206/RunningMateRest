@@ -20,6 +20,7 @@ public class Instance implements Serializable{
     @Id
     @GeneratedValue
     private Integer id;
+    private Integer instanceCode;
     @OneToMany
     private List<User> usersInvolved;
     @ManyToMany
@@ -31,6 +32,11 @@ public class Instance implements Serializable{
 
     public void addUser(User toAdd){
         this.usersInvolved.add(toAdd);
+        generateInstanceCode(this.usersInvolved);
+    }
+
+    public void addManyUsers(List<User> toAdd){
+        usersInvolved.addAll(toAdd);
     }
 
     public void addTextMessage (Message toAdd){
@@ -39,5 +45,31 @@ public class Instance implements Serializable{
 
     public void addImageMessage (ImageMessage toAdd){
         this.imageMessages.add(toAdd);
+    }
+
+    public static Integer generateInstanceCodeFromNames(List<String> userNames){
+        StringBuilder builder = new StringBuilder();
+        for (String current : userNames){
+            builder.append(current);
+        }
+        return generateInstanceCode(builder.toString());
+    }
+
+    public static Integer generateInstanceCode(List<User> usersInvolved){
+        StringBuilder builder = new StringBuilder();
+        for (User current : usersInvolved){
+            builder.append(current.getName());
+        }
+        return generateInstanceCode(builder.toString());
+    }
+
+    public static Integer generateInstanceCode(String string){
+        StringBuilder builder = new StringBuilder(string);
+        String textCode = builder.toString().toUpperCase();
+        int intCode = 0;
+        for(char currentChar : textCode.toCharArray()){
+            intCode+=currentChar;
+        }
+        return intCode;
     }
 }

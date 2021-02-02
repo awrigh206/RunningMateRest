@@ -27,7 +27,7 @@ public class ImageMessage implements Serializable{
     public ImageMessage (ImageDto dto){
         this.bytes = Base64.getDecoder().decode(dto.getBase64());
         this.name = dto.getName();
-        this.sender = dto.getSender();
-        this.recepient = dto.getRecipient();
+        this.sender = dto.getUsersInvolved().get(0);
+        this.recepient = dto.getUsersInvolved().get(1);
     }
 }

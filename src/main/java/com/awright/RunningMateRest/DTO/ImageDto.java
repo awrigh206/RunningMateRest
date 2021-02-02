@@ -1,5 +1,6 @@
 package com.awright.RunningMateRest.DTO;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -7,6 +8,5 @@ import lombok.Getter;
 public class ImageDto {
     String name;
     String base64;
-    String recipient;
-    String sender;
+    List<String> usersInvolved;
 }

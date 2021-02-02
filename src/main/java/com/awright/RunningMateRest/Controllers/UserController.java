@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.UserDto;
+import com.awright.RunningMateRest.Models.Instance;
 import com.awright.RunningMateRest.Models.User;
 import com.awright.RunningMateRest.Services.UserService;
 import org.apache.commons.logging.Log;
@@ -121,8 +122,10 @@ public class UserController {
         User user = userService.fetchUser(userDto);
         List<String> names = new ArrayList<>();
 
-        for (User current : user.getChallenges()){
-            names.add(current.getName());
+        for (Instance currentInstance : user.getInstances()){
+            for(User currentUser : currentInstance.getUsersInvolved()){
+                names.add(currentUser.getName());
+            }
         }
         return names;
     }

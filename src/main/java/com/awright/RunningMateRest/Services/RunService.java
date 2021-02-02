@@ -4,6 +4,7 @@ import java.util.Optional;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.DistanceUpdateDto;
 import com.awright.RunningMateRest.DTO.UserDto;
+import com.awright.RunningMateRest.Models.Instance;
 import com.awright.RunningMateRest.Models.Pair;
 import com.awright.RunningMateRest.Models.Run;
 import com.awright.RunningMateRest.Models.Tracking;
@@ -23,13 +24,15 @@ public class RunService {
     private UserService  userService;
     private TrackingRepository trackingRepo;
     private final Log log = LogFactory.getLog(RunService.class);
+    private InstanceService instanceService;
 
     @Autowired
-    public RunService(RunRepository runRepo, UserRepository userRepo, UserService userService, TrackingRepository trackingRepo){
+    public RunService(RunRepository runRepo, UserRepository userRepo, UserService userService, TrackingRepository trackingRepo, InstanceService instanceService){
         this.runRepo = runRepo;
         this.userRepo = userRepo;
         this.userService = userService;
         this.trackingRepo = trackingRepo;
+        this.instanceService = instanceService;
     }
 
     public boolean isChallengedWaiting(String name){
@@ -51,11 +54,12 @@ public class RunService {
     }
 
     public boolean beginRun(ChallengeDto challengeDto){
-        User issuingUser = userService.fetchUser(new UserDto(challengeDto.getIssuingUser()));
-        User challengedUser = userService.fetchUser(new UserDto(challengeDto.getChallengedUser()));
+        Instance instance = instanceService.getInstance(challengeDto);
+        // User issuingUser = userService.fetchUser(new UserDto(challengeDto.getIssuingUser()));
+        // User challengedUser = userService.fetchUser(new UserDto(challengeDto.getChallengedUser()));
 
-        if(issuingUser.getRun() == null || challengedUser.getRun() == null)
-            return createRun(challengeDto);
+        if(instance.getRun() == null)
+            return createRun(instance);
         if(issuingUser.getRun().getChallengedUser().equals(challengedUser.getName()))
             return true;
         else{
@@ -63,8 +67,8 @@ public class RunService {
         }
     }
 
-    private boolean createRun(ChallengeDto runDto){
-        Pair pair = new Pair(runDto);
+    private boolean createRun(Instance instance){
+        // Pair pair = new Pair(runDto);
         Tracking tracking = setupTracking(pair.getIssuingUser());
         Run run = new Run(pair,tracking);
         User issuingUser = userService.fetchUser(new UserDto(runDto.getIssuingUser()));
