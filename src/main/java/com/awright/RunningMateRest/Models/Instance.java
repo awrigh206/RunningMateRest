@@ -2,11 +2,11 @@ package com.awright.RunningMateRest.Models;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +27,8 @@ public class Instance implements Serializable{
     private List<Message> textMessages;
     @ManyToMany
     private List<ImageMessage> imageMessages;
-    @ManyToOne
-    private Run run;
+    @OneToMany
+    private Map<String,Tracking> trackings;
 
     public void addUser(User toAdd){
         this.usersInvolved.add(toAdd);
@@ -46,7 +46,7 @@ public class Instance implements Serializable{
     public void addImageMessage (ImageMessage toAdd){
         this.imageMessages.add(toAdd);
     }
-
+    
     public static Integer generateInstanceCodeFromNames(List<String> userNames){
         StringBuilder builder = new StringBuilder();
         for (String current : userNames){

@@ -60,8 +60,8 @@ public class RunController {
 
     @PutMapping
     @RequestMapping(path = "/update")
-    public Tracking updateRun(@RequestBody DistanceUpdateDto distanceDto){
-        return runService.updateRunProgress(distanceDto);
+    public void updateRun(@RequestBody DistanceUpdateDto distanceDto){
+        runService.updateRunProgress(distanceDto);
     }
 
     @GetMapping

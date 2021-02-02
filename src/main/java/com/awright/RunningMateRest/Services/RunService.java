@@ -1,15 +1,13 @@
 package com.awright.RunningMateRest.Services;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.DistanceUpdateDto;
 import com.awright.RunningMateRest.DTO.UserDto;
 import com.awright.RunningMateRest.Models.Instance;
-import com.awright.RunningMateRest.Models.Pair;
-import com.awright.RunningMateRest.Models.Run;
 import com.awright.RunningMateRest.Models.Tracking;
 import com.awright.RunningMateRest.Models.User;
-import com.awright.RunningMateRest.Repositories.RunRepository;
 import com.awright.RunningMateRest.Repositories.TrackingRepository;
 import com.awright.RunningMateRest.Repositories.UserRepository;
 import org.apache.commons.logging.Log;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RunService {
-    private RunRepository runRepo;
     private UserRepository userRepo;
     private UserService  userService;
     private TrackingRepository trackingRepo;
@@ -27,8 +24,7 @@ public class RunService {
     private InstanceService instanceService;
 
     @Autowired
-    public RunService(RunRepository runRepo, UserRepository userRepo, UserService userService, TrackingRepository trackingRepo, InstanceService instanceService){
-        this.runRepo = runRepo;
+    public RunService( UserRepository userRepo, UserService userService, TrackingRepository trackingRepo, InstanceService instanceService){
         this.userRepo = userRepo;
         this.userService = userService;
         this.trackingRepo = trackingRepo;
@@ -54,69 +50,65 @@ public class RunService {
     }
 
     public boolean beginRun(ChallengeDto challengeDto){
-        Instance instance = instanceService.getInstance(challengeDto);
         // User issuingUser = userService.fetchUser(new UserDto(challengeDto.getIssuingUser()));
         // User challengedUser = userService.fetchUser(new UserDto(challengeDto.getChallengedUser()));
 
-        if(instance.getRun() == null)
-            return createRun(instance);
-        if(issuingUser.getRun().getChallengedUser().equals(challengedUser.getName()))
-            return true;
-        else{
+        // if(instance.getRun() == null)
             return createRun(challengeDto);
-        }
+        // if(issuingUser.getRun().getChallengedUser().equals(challengedUser.getName()))
+        //     return true;
+        // else{
+        //     return createRun(challengeDto);
+        // }
     }
 
-    private boolean createRun(Instance instance){
+    private boolean createRun(ChallengeDto challengeDto){
         // Pair pair = new Pair(runDto);
-        Tracking tracking = setupTracking(pair.getIssuingUser());
-        Run run = new Run(pair,tracking);
-        User issuingUser = userService.fetchUser(new UserDto(runDto.getIssuingUser()));
-        User challengedUser = userService.fetchUser(new UserDto(runDto.getChallengedUser()));
-
-        if(issuingUser == null || challengedUser  == null){
-            return false;
-        }
-        else{
-            issuingUser.setRun(run);
-            challengedUser.setRun(run);
-            runRepo.save(run);
-            userRepo.save(issuingUser);
-            userRepo.save(challengedUser);
-            return true;
-        }
+        Instance instance = new Instance();
+        instance = setupTracking(challengeDto.getInvolvedUsers(), instance);
+        List<User> users = fetchUsers(challengeDto.getInvolvedUsers());
+        instance.addManyUsers(users);
+        userRepo.saveAll(users);
+        instanceService.createNewInstance(challengeDto);
+        return true;
 
     }
 
-    public Tracking setupTracking (String user){
-        Tracking tracker = new Tracking();
-        trackingRepo.save(tracker);
-        return tracker;
+    public Instance setupTracking (List<String> users, Instance instance){
+        for(String current : users){
+            Tracking tracker = new Tracking();
+            trackingRepo.save(tracker);
+            instance.getTrackings().put(current, tracker);
+        }
+        return instance;
     }
 
-    public Tracking updateRunProgress(DistanceUpdateDto distanceUpdateDto){
-        Optional<User> possibleUser = userRepo.findByName(distanceUpdateDto.getChallengeDto().getIssuingUser());
-        Optional<User> possibleChallengedUser = userRepo.findByName(distanceUpdateDto.getChallengeDto().getChallengedUser());
-        updateUser(possibleUser, distanceUpdateDto);
-        if(possibleChallengedUser.isPresent()){
-            User challenegedUser = possibleChallengedUser.get();
-            return challenegedUser.getRun().getTracking();
-        }
-        else{
-            return new Tracking(0.0, 0.0, 0.0);
+    public void updateRunProgress(DistanceUpdateDto distanceUpdateDto){
+        ChallengeDto challengeDto = distanceUpdateDto.getChallengeDto();
+        Instance instance = instanceService.getInstance(challengeDto);
+        // Optional<User> possibleUser = userRepo.findByName(distanceUpdateDto.getChallengeDto().getIssuingUser());
+        // Optional<User> possibleChallengedUser = userRepo.findByName(distanceUpdateDto.getChallengeDto().getChallengedUser());
+
+        for(User currentUser : instance.getUsersInvolved()){
+            updateUser(currentUser, distanceUpdateDto,instance);
         }
     }
 
-    private void updateUser (Optional<User> toUpdate, DistanceUpdateDto distanceUpdateDto){
-        if(toUpdate.isPresent()){
-            User user = toUpdate.get();
-            Run run = toUpdate.get().getRun();
-            Tracking tracking = run.getTracking();
-            tracking.setDistance(tracking.getDistance() + distanceUpdateDto.getDistanceTraveled());
-            tracking.setAltitude(tracking.getAltitude() + distanceUpdateDto.getHeightTraveled());
-            tracking.setTime(tracking.getTime() + distanceUpdateDto.getTimeTaken());
-            userRepo.save(user);
+    private void updateUser (User user, DistanceUpdateDto distanceUpdateDto, Instance instance){
+        Tracking tracking = instance.getTrackings().get(user.getUsername());
+        tracking.setDistance(tracking.getDistance() + distanceUpdateDto.getDistanceTraveled());
+        tracking.setAltitude(tracking.getAltitude() + distanceUpdateDto.getHeightTraveled());
+        tracking.setTime(tracking.getTime() + distanceUpdateDto.getTimeTaken());
+        userRepo.save(user);
+    }
+
+    private List<User> fetchUsers(List<String> names){
+        List<User> users = new ArrayList<>();
+        for(String current : names){
+            User currentUser = userService.fetchUser(new UserDto(current));
+            users.add(currentUser);
         }
+        return users;
     }
     
 }

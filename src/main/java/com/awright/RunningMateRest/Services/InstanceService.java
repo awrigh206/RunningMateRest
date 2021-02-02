@@ -34,6 +34,10 @@ public class InstanceService {
         instanceRepo.save(instance);
     }
 
+    public void saveInstance (Instance instance){
+        instanceRepo.save(instance);
+    }
+
     public List<User> getInvolvedUsers(ChallengeDto challengeDto){
         List<User> involvedUsers = new ArrayList<>();
         for(String currentName : challengeDto.getInvolvedUsers()){
