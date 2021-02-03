@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -41,12 +40,12 @@ public class Instance implements Serializable{
 
     public void addUser(User toAdd){
         this.usersInvolved.add(toAdd);
-        generateInstanceCode(this.usersInvolved);
+        instanceCode = generateInstanceCode(this.usersInvolved);
     }
 
     public void addManyUsers(List<User> toAdd){
         usersInvolved.addAll(toAdd);
-        generateInstanceCode(this.usersInvolved);
+        instanceCode = generateInstanceCode(this.usersInvolved);
     }
 
     public void addTextMessage (Message toAdd){
