@@ -1,6 +1,8 @@
 package com.awright.RunningMateRest.Models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Entity;
@@ -13,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter @Setter @ToString @NoArgsConstructor
+@Getter @Setter @ToString
 @Entity
 public class Instance implements Serializable{
     private static final long serialVersionUID = 2508557110934308736L;
@@ -30,6 +32,13 @@ public class Instance implements Serializable{
     @OneToMany
     private Map<String,Tracking> trackings;
 
+    public Instance(){
+        this.imageMessages = new ArrayList<>();
+        this.textMessages = new ArrayList<>();
+        this.trackings = new HashMap<>();
+        this.usersInvolved = new ArrayList<>();
+    }
+
     public void addUser(User toAdd){
         this.usersInvolved.add(toAdd);
         generateInstanceCode(this.usersInvolved);
@@ -37,6 +46,7 @@ public class Instance implements Serializable{
 
     public void addManyUsers(List<User> toAdd){
         usersInvolved.addAll(toAdd);
+        generateInstanceCode(this.usersInvolved);
     }
 
     public void addTextMessage (Message toAdd){
