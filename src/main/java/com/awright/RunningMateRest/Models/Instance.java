@@ -19,10 +19,10 @@ import lombok.ToString;
 public class Instance implements Serializable{
     private static final long serialVersionUID = 2508557110934308736L;
     @Id
-    @GeneratedValue
-    private Integer id;
+    // @GeneratedValue
+    // private Integer id;
     private Integer instanceCode;
-    @OneToMany
+    @ManyToMany
     private List<User> usersInvolved;
     @ManyToMany
     private List<Message> textMessages;
