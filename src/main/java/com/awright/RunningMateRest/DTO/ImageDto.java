@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor @Getter 
 public class ImageDto {
-    String name;
-    String base64;
-    List<String> usersInvolved;
+    private String name;
+    private String base64;
+    private List<String> usersInvolved;
 }

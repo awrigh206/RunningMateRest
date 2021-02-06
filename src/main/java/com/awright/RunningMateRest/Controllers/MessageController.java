@@ -45,7 +45,6 @@ public class MessageController {
     @RequestMapping(path="/image")
     public void createImageMessage(@RequestBody ImageDto messageDto){
         log.info("Adding image message with the name: " + messageDto.getName());
-        ChallengeDto challenge = new ChallengeDto(messageDto.getUsersInvolved());
         messageService.addImageMessage(messageDto);
     }
 

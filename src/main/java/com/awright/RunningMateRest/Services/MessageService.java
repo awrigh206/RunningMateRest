@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.ImageDto;
 import com.awright.RunningMateRest.DTO.MessageDto;
-import com.awright.RunningMateRest.DTO.UserDto;
 import com.awright.RunningMateRest.Models.ImageMessage;
 import com.awright.RunningMateRest.Models.Instance;
 import com.awright.RunningMateRest.Models.Message;
-import com.awright.RunningMateRest.Models.User;
 import com.awright.RunningMateRest.Repositories.ImageMessageRepository;
 import com.awright.RunningMateRest.Repositories.InstanceRepo;
 import com.awright.RunningMateRest.Repositories.MessageRepository;
@@ -47,20 +44,8 @@ public class MessageService {
         imageRepo.save(message);
         Integer code = Instance.generateInstanceCodeFromNames(imageDto.getUsersInvolved());
         Instance instance = instanceService.getInstance(code);
-        // Optional<User> sender = userRepo.findByName(imageDto.getSender());
-        // Optional<User> recpient = userRepo.findByName(imageDto.getRecipient());
         instance.addImageMessage(message);
         instanceRepo.save(instance);
-        // if(sender.isPresent()){
-        //     sender.get().addImage(message);
-        //     userRepo.save(sender.get());
-        //     log.info("added to sender");
-        // }
-
-        // if(recpient.isPresent()){
-        //     recpient.get().addImage(message);
-        //     userRepo.save(recpient.get());
-        // }
     }
 
     public void addMessage(MessageDto messageDto){
@@ -71,40 +56,11 @@ public class MessageService {
         messageRepo.save(message);
         instance.addTextMessage(message);
         instanceRepo.save(instance);
-        // Optional<User> sender = userRepo.findByName(messageDto.getSender());
-        // Optional<User> recpient = userRepo.findByName(messageDto.getRecipient());
-        // if(sender.isPresent()){
-        //     sender.get().addMessage(message);
-        //     userRepo.save(sender.get());
-        //     log.info("added to sender");
-        // }
-
-        // if(recpient.isPresent()){
-        //     recpient.get().addMessage(message);
-        //     userRepo.save(recpient.get());
-        // }
     }
 
     public List<Message> getMyMessages(ChallengeDto challengeDto){
         Instance instance = instanceService.getInstance(challengeDto);
-        // UserDto issuingUser = new UserDto(challengeDto.getIssuingUser());
-        // List<Message> messages = userService.fetchUser(issuingUser).getMessages();
-        List<Message> toSend = new ArrayList<>();
-        toSend = instance.getTextMessages();
-
-        // for(Message current : messages){
-        //     if(current.getSender().equals(issuingUser.getUserName()) || current.getRecipient().equals(issuingUser.getUserName())){
-        //         toSend.add(current);
-        //     }
-        // }
-        // if(toSend.isEmpty()){
-        //     Message toAdd = new Message();
-        //     toAdd.setMessageBody("You currently do not have any messages");
-        //     toAdd.setSender("The System");
-        //     toAdd.setTimeStamp("Enternity");
-        //     toAdd.setRecipient(challengeDto.getIssuingUser());
-        //     toSend.add(toAdd);
-        // }
+        List<Message> toSend = instance.getTextMessages();
         return toSend;
     }
 
