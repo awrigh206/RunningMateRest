@@ -42,14 +42,6 @@ public class User implements UserDetails {
     private boolean readyToRun;
     @ManyToMany
     private List<Instance> instances;
-    // @ManyToMany
-    // private List<User> challenges;
-    // @ManyToMany
-    // private List<Message> messages;
-    // @ManyToMany
-    // private List <ImageMessage> images;
-    // @ManyToOne
-    // private Run run;
     @Embedded
     private List<GrantedAuthority> authorities = new ArrayList<>();
 
