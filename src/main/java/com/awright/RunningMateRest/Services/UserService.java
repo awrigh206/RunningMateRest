@@ -1,6 +1,7 @@
 package com.awright.RunningMateRest.Services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import com.awright.RunningMateRest.DTO.ChallengeDto;
@@ -108,14 +109,19 @@ public class UserService implements UserDetailsService{
         Optional<User> issuingUser = userRepo.findByName(challengeDto.getInvolvedUsers().get(0));
         Optional<User> challengedUser = userRepo.findByName(challengeDto.getInvolvedUsers().get(1));
         if(issuingUser.isPresent() && challengedUser.isPresent()){
-            // User issuing = issuingUser.get();
-            // User challenged = challengedUser.get();
-            instanceService.createNewInstance(challengeDto);
-            // issuing.getInstances(challenged);
-            // userRepo.save(issuing);
-            // challenged.addChallenege(issuing);
-            // userRepo.save(challenged);
+            Instance instance = instanceService.createNewInstance(challengeDto);
+            saveUsersInstance(new ArrayList<>(Arrays.asList(issuingUser,challengedUser)), instance);
             log.info("Did the thing");
+        }
+    }
+
+    public void saveUsersInstance (List<Optional<User>> users, Instance instance){
+        for(Optional<User> current : users){
+            if(current.isPresent()){
+                User user = current.get();
+                user.addInstance(instance);
+                userRepo.save(user);
+            }
         }
     }
 

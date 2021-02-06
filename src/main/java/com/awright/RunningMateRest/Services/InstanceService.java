@@ -28,10 +28,10 @@ public class InstanceService {
         }
     }
 
-    public void createNewInstance (ChallengeDto challengeDto){
+    public Instance createNewInstance (ChallengeDto challengeDto){
         Instance instance = new Instance();
         instance.addManyUsers(getInvolvedUsers(challengeDto));
-        instanceRepo.save(instance);
+        return instanceRepo.save(instance);
     }
 
     public void saveInstance (Instance instance){

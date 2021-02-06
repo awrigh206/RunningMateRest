@@ -61,14 +61,9 @@ public class User implements UserDetails {
         waiting = false;
     }
 
-    // public void addMessage(Message toAdd){
-    //     messages.add(toAdd);
-    // }
-
-    // public void addImage(ImageMessage toAdd){
-    //     this.images.add(toAdd);
-    // }
-
+    public void addInstance (Instance instance){
+        this.instances.add(instance);
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
