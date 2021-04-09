@@ -2,6 +2,8 @@ package com.awright.RunningMateRest.Services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.DistanceUpdateDto;
 import com.awright.RunningMateRest.DTO.UserDto;
@@ -86,12 +88,14 @@ public class RunService {
     public void updateRunProgress(DistanceUpdateDto distanceUpdateDto){
         ChallengeDto challengeDto = distanceUpdateDto.getChallengeDto();
         Instance instance = instanceService.getInstance(challengeDto);
-        // Optional<User> possibleUser = userRepo.findByName(distanceUpdateDto.getChallengeDto().getIssuingUser());
+        Optional<User> user = userRepo.findByName(distanceUpdateDto.getChallengeDto().getInvolvedUsers().get(0));
         // Optional<User> possibleChallengedUser = userRepo.findByName(distanceUpdateDto.getChallengeDto().getChallengedUser());
-
-        for(User currentUser : instance.getUsersInvolved()){
-            updateUser(currentUser, distanceUpdateDto,instance);
+        if(user.isPresent()){
+            updateUser(user.get(), distanceUpdateDto, instance);
         }
+        // for(User currentUser : instance.getUsersInvolved()){
+        //     updateUser(currentUser, distanceUpdateDto,instance);
+        // }
     }
 
     private void updateUser (User user, DistanceUpdateDto distanceUpdateDto, Instance instance){
@@ -99,9 +103,9 @@ public class RunService {
         if(tracking == null){
             tracking = new Tracking();
         }
-    
+
         tracking.setDistance(tracking.getDistance() + distanceUpdateDto.getDistanceTraveled());
-        log.info(tracking.getDistance());
+        log.info(user.getName()+" has done: " + tracking.getDistance());
         tracking.setAltitude(tracking.getAltitude() + distanceUpdateDto.getHeightTraveled());
         tracking.setTime(tracking.getTime() + distanceUpdateDto.getTimeTaken());
         if(!instance.getTrackings().containsKey(user.getUsername())){
