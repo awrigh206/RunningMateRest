@@ -41,9 +41,9 @@ public class MessageService {
 
     public void addImageMessage(ImageDto imageDto){
         ImageMessage message = new ImageMessage(imageDto);
-        imageRepo.save(message);
         Integer code = Instance.generateInstanceCodeFromNames(imageDto.getUsersInvolved());
         Instance instance = instanceService.getInstance(code);
+        imageRepo.save(message);
         instance.addImageMessage(message);
         instanceRepo.save(instance);
     }
@@ -66,7 +66,6 @@ public class MessageService {
 
     public List<ImageDto> getMyImages(ChallengeDto challengeDto){
         Instance instance = instanceService.getInstance(challengeDto);
-        // UserDto issuingUser = new UserDto(challengeDto.getIssuingUser());
         List<ImageMessage> images = instance.getImageMessages();
         List<ImageDto> toSend = new ArrayList<>();
 

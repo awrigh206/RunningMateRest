@@ -6,6 +6,7 @@ import com.awright.RunningMateRest.DTO.ChallengeDto;
 import com.awright.RunningMateRest.DTO.UserDto;
 import com.awright.RunningMateRest.Models.Instance;
 import com.awright.RunningMateRest.Models.User;
+import com.awright.RunningMateRest.Services.InstanceService;
 import com.awright.RunningMateRest.Services.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,11 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class UserController {
     private UserService userService;
+    private InstanceService instanceService;
     private final Log log = LogFactory.getLog(UserController.class);
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, InstanceService instanceService) {
         this.userService = userService;
+        this.instanceService = instanceService;
     }
 
     @PostMapping
@@ -116,7 +119,7 @@ public class UserController {
 
     @GetMapping
     @RequestMapping(path = "/challenges")
-    public List<String> createChallenge(@RequestParam("name") String name) {
+    public List<String> getChallenges(@RequestParam("name") String name) {
         //Returns the names of the users who have challenged the given user
         UserDto userDto = new UserDto(name);
         User user = userService.fetchUser(userDto);

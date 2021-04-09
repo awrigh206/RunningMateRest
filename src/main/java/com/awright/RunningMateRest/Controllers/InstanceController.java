@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 @RestController
 @RequestMapping(path = "/instance")
@@ -22,11 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class InstanceController {
     @Autowired
     private InstanceService instanceService;
+    private final Log log = LogFactory.getLog(InstanceController.class);
 
     @GetMapping
     public List<User> getInvolvedUsers(@RequestParam("code") String code){
         Integer intCode = Instance.generateInstanceCode(code);
-        return instanceService.getUsersFromInstance(intCode);
+        List<User> users = instanceService.getUsersFromInstance(intCode);
+        log.info(users.toString());
+        return users;
     }
 
     @PostMapping

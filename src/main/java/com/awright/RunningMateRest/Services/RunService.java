@@ -96,9 +96,18 @@ public class RunService {
 
     private void updateUser (User user, DistanceUpdateDto distanceUpdateDto, Instance instance){
         Tracking tracking = instance.getTrackings().get(user.getUsername());
+        if(tracking == null){
+            tracking = new Tracking();
+        }
+    
         tracking.setDistance(tracking.getDistance() + distanceUpdateDto.getDistanceTraveled());
+        log.info(tracking.getDistance());
         tracking.setAltitude(tracking.getAltitude() + distanceUpdateDto.getHeightTraveled());
         tracking.setTime(tracking.getTime() + distanceUpdateDto.getTimeTaken());
+        if(!instance.getTrackings().containsKey(user.getUsername())){
+            instance.getTrackings().put(user.getUsername(), tracking);
+        }
+        trackingRepo.save(tracking);
         userRepo.save(user);
     }
 

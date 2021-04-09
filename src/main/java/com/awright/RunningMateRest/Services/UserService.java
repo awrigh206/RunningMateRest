@@ -111,7 +111,6 @@ public class UserService implements UserDetailsService{
         if(issuingUser.isPresent() && challengedUser.isPresent()){
             Instance instance = instanceService.createNewInstance(challengeDto);
             saveUsersInstance(new ArrayList<>(Arrays.asList(issuingUser,challengedUser)), instance);
-            log.info("Did the thing");
         }
     }
 

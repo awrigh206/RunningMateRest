@@ -41,6 +41,7 @@ public class Instance implements Serializable{
     public void addUser(User toAdd){
         this.usersInvolved.add(toAdd);
         instanceCode = generateInstanceCode(this.usersInvolved);
+        this.trackings.put(toAdd.getName(), new Tracking());
     }
 
     public void addManyUsers(List<User> toAdd){
