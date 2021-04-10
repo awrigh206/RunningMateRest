@@ -65,7 +65,6 @@ public class RunService {
     }
 
     private boolean createRun(ChallengeDto challengeDto){
-        // Pair pair = new Pair(runDto);
         Instance instance = new Instance();
         instance = setupTracking(challengeDto.getInvolvedUsers(), instance);
         List<User> users = fetchUsers(challengeDto.getInvolvedUsers());
@@ -89,13 +88,9 @@ public class RunService {
         ChallengeDto challengeDto = distanceUpdateDto.getChallengeDto();
         Instance instance = instanceService.getInstance(challengeDto);
         Optional<User> user = userRepo.findByName(distanceUpdateDto.getChallengeDto().getInvolvedUsers().get(0));
-        // Optional<User> possibleChallengedUser = userRepo.findByName(distanceUpdateDto.getChallengeDto().getChallengedUser());
         if(user.isPresent()){
             updateUser(user.get(), distanceUpdateDto, instance);
         }
-        // for(User currentUser : instance.getUsersInvolved()){
-        //     updateUser(currentUser, distanceUpdateDto,instance);
-        // }
     }
 
     private void updateUser (User user, DistanceUpdateDto distanceUpdateDto, Instance instance){
