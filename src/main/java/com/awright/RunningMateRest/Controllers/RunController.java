@@ -64,9 +64,9 @@ public class RunController {
         runService.updateRunProgress(distanceDto);
     }
 
-    @GetMapping
+    @PutMapping
     @RequestMapping(path="/opponent")
-    public ResponseEntity<Tracking> getLastOpponentUpdate(){
-        return ResponseEntity.ok(new Tracking());
+    public ResponseEntity<Tracking> getLastOpponentUpdate(@RequestBody ChallengeDto challengeDto){
+        return ResponseEntity.ok(runService.getOpponentTracking(challengeDto));
     }
 }

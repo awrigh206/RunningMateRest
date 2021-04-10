@@ -84,6 +84,19 @@ public class RunService {
         return instance;
     }
 
+    public Tracking getOpponentTracking (ChallengeDto challengeDto){
+        Instance instance = instanceService.getInstance(challengeDto);
+        Optional<User> user = userRepo.findByName(challengeDto.getInvolvedUsers().get(1));
+        if(user.isPresent()){
+            Tracking tracking = instance.getTrackings().get(user.get().getName());
+            return tracking;
+        }
+        else{
+            log.info("Did not find a tracking, returning an empty one to avoid error");
+            return new Tracking();
+        }
+    }
+
     public void updateRunProgress(DistanceUpdateDto distanceUpdateDto){
         ChallengeDto challengeDto = distanceUpdateDto.getChallengeDto();
         Instance instance = instanceService.getInstance(challengeDto);
