@@ -88,8 +88,7 @@ public class RunService {
         Instance instance = instanceService.getInstance(challengeDto);
         Optional<User> user = userRepo.findByName(challengeDto.getInvolvedUsers().get(1));
         if(user.isPresent()){
-            Tracking tracking = instance.getTrackings().get(user.get().getName());
-            return tracking;
+            return instance.getTrackings().get(user.get().getName());
         }
         else{
             log.info("Did not find a tracking, returning an empty one to avoid error");
